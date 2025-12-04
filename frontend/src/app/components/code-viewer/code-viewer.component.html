@@ -1,0 +1,99 @@
+<div class="loading-container" *ngIf="isLoading()">
+  <div class="loading-spinner">⚡</div>
+  <p>Loading conversion result...</p>
+</div>
+
+<div class="viewer-container" *ngIf="!isLoading() && conversionData() as data">
+  <!-- Header -->
+  <header class="viewer-header">
+    <button class="back-button" (click)="goBack()">
+      ← Back to Graveyard
+    </button>
+    <div class="header-content">
+      <h2>{{ data.originalFilename }} → {{ data.convertedFilename }}</h2>
+      <p class="tech-info">{{ data.sourceTech }} → {{ data.targetTech }}</p>
+    </div>
+    <button class="download-button" (click)="download()">
+      📦 Download
+    </button>
+  </header>
+
+  <!-- Code Panes -->
+  <div class="code-panes">
+    <div class="pane original">
+      <div class="pane-header">
+        <h3>💀 Original ({{ data.sourceTech }})</h3>
+      </div>
+      <pre class="code-content"><code>{{ data.originalCode }}</code></pre>
+    </div>
+
+    <div class="pane-divider"></div>
+
+    <div class="pane converted">
+      <div class="pane-header">
+        <h3>✨ Converted ({{ data.targetTech }})</h3>
+      </div>
+      <pre class="code-content"><code>{{ data.convertedCode }}</code></pre>
+    </div>
+  </div>
+
+  <!-- Autopsy Report -->
+  <div class="autopsy-report">
+    <h3 class="report-title">📜 Autopsy Report</h3>
+
+    <div class="report-tabs">
+      <button class="tab"
+              [class.active]="activeTab() === 'notes'"
+              (click)="setActiveTab('notes')">
+        📝 Migration Notes ({{ data.migrationNotes.length }})
+      </button>
+      <button class="tab"
+              [class.active]="activeTab() === 'dependencies'"
+              (click)="setActiveTab('dependencies')">
+        📦 Dependencies ({{ data.dependencies.length }})
+      </button>
+      <button class="tab"
+              [class.active]="activeTab() === 'breaking'"
+              (click)="setActiveTab('breaking')">
+        ⚠️ Breaking Changes ({{ data.breakingChanges.length }})
+      </button>
+      <button class="tab"
+              [class.active]="activeTab() === 'warnings'"
+              (click)="setActiveTab('warnings')">
+        🚨 Warnings ({{ data.warnings.length }})
+      </button>
+    </div>
+
+    <div class="report-content">
+      <!-- Migration Notes -->
+      <div class="report-section" *ngIf="activeTab() === 'notes'">
+        <ul class="report-list">
+          <li *ngFor="let note of data.migrationNotes">{{ note }}</li>
+        </ul>
+      </div>
+
+      <!-- Dependencies -->
+      <div class="report-section" *ngIf="activeTab() === 'dependencies'">
+        <ul class="report-list">
+          <li *ngFor="let dep of data.dependencies">
+            <code>{{ dep }}</code>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Breaking Changes -->
+      <div class="report-section" *ngIf="activeTab() === 'breaking'">
+        <ul class="report-list warning">
+          <li *ngFor="let change of data.breakingChanges">{{ change }}</li>
+        </ul>
+      </div>
+
+      <!-- Warnings -->
+      <div class="report-section" *ngIf="activeTab() === 'warnings'">
+        <ul class="report-list error">
+          <li *ngFor="let warning of data.warnings">{{ warning }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+appsettings.Development.json
+*.db
+*.db-shm
+*.db-wal
+
+# Angular
+node_modules/
+dist/
+.angular/
+*.ngfactory.ts
+*.ngsummary.json
+*.metadata.json
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads
+uploads/
+temp/
+
+# Logs
+logs/
+*.log
+npm-debug.log*

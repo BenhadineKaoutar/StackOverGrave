@@ -1,0 +1,201 @@
+.graveyard-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+// Fog overlay effect
+.fog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    transparent 100%
+  );
+  animation: fog-drift 20s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+// Floating particles
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: particle-float 15s ease-in-out infinite;
+
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      left: random(100) * 1%;
+      top: random(100) * 1%;
+      animation-delay: random(10) * 0.5s;
+      animation-duration: (10 + random(10)) * 1s;
+      width: (2 + random(4)) * 1px;
+      height: (2 + random(4)) * 1px;
+      opacity: 0.1 + (random(20) * 0.01);
+    }
+  }
+}
+
+// Filter section
+.filter-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.filter-chip {
+  padding: 8px 16px;
+  border: 2px solid #444;
+  border-radius: 20px;
+  background: var(--bg-light);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: var(--accent-green);
+    color: var(--bg-dark);
+    border-color: var(--accent-green);
+  }
+}
+
+// Tombstone grid
+.tombstone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+// Empty states
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  position: relative;
+  z-index: 2;
+
+  .empty-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  h3 {
+    font-size: 32px;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 18px;
+  }
+}
+
+// Animations
+@keyframes fog-drift {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-100vh) translateX(20px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  .tombstone-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .graveyard-container {
+    padding: 16px;
+  }
+
+  .tombstone-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .filter-section {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--accent-green);
+      border-radius: 2px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fog-overlay,
+  .particle,
+  .empty-icon {
+    animation: none !important;
+  }
+}

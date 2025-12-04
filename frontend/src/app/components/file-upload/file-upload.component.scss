@@ -1,0 +1,187 @@
+.upload-container {
+  margin-bottom: 32px;
+}
+
+.upload-zone {
+  position: relative;
+  border: 3px dashed #444;
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--bg-light);
+  transition: all 300ms ease-out;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent-green);
+    background: rgba(0, 255, 65, 0.05);
+  }
+
+  &.dragging {
+    border-color: var(--accent-green);
+    background: rgba(0, 255, 65, 0.1);
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+  }
+
+  &.uploading {
+    border-style: solid;
+    border-color: var(--accent-green);
+  }
+
+  &.analyzing {
+    border-style: solid;
+    border-color: #9d4edd;
+    background: rgba(157, 78, 221, 0.05);
+    box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
+  }
+}
+
+.ghost-hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  animation: ghost-float 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.upload-content {
+  position: relative;
+}
+
+.upload-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.file-types {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.file-limit {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-button {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    background: var(--accent-green-dark);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.upload-progress {
+  .progress-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin-bottom: 16px;
+    color: var(--accent-green);
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    width: 100%;
+    max-width: 400px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-green);
+    border-radius: 4px;
+    transition: width 200ms ease-out;
+    box-shadow: 0 0 10px var(--accent-green);
+  }
+
+  .progress-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-green);
+  }
+}
+
+// Animations
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes ghost-float {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-zone {
+    padding: 32px 16px;
+  }
+
+  .upload-icon {
+    font-size: 48px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+}

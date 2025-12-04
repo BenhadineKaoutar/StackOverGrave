@@ -1,0 +1,64 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="certificate" (click)="$event.stopPropagation()">
+    <!-- Deceased Stamp -->
+    <div class="stamp">DECEASED</div>
+
+    <!-- Certificate Header -->
+    <div class="certificate-header">
+      <h2>⚰️ OFFICIAL TECHNOLOGY DEATH CERTIFICATE ⚰️</h2>
+    </div>
+
+    <!-- Certificate Body -->
+    <div class="certificate-body">
+      <div class="field">
+        <label>Technology Name:</label>
+        <div class="value">{{ certificate.technology }}</div>
+      </div>
+
+      <div class="field">
+        <label>Date of Death:</label>
+        <div class="value">{{ certificate.deprecatedDate | date:'longDate' }}</div>
+      </div>
+
+      <div class="field">
+        <label>Cause of Death:</label>
+        <div class="value cause-of-death">{{ certificate.causeOfDeath }}</div>
+      </div>
+
+      <div class="field">
+        <label>Last Known Location:</label>
+        <div class="value">{{ certificate.originalFilename }}</div>
+      </div>
+
+      <div class="field">
+        <label>File Statistics:</label>
+        <div class="value">
+          <div>Lines of Code: {{ certificate.fileStats.linesOfCode }}</div>
+          <div>File Size: {{ formatFileSize(certificate.fileStats.fileSize) }}</div>
+          <div>Complexity: {{ certificate.fileStats.complexity }}</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Survived By:</label>
+        <div class="value survived-by">{{ getModernReplacement() }}</div>
+      </div>
+
+      <div class="warnings" *ngIf="certificate.warnings.length > 0">
+        <label>⚠️ Warnings:</label>
+        <ul>
+          <li *ngFor="let warning of certificate.warnings">{{ warning }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Certificate Footer -->
+    <div class="certificate-footer">
+      <p>This certificate confirms the official deprecation of the above technology.</p>
+      <p class="signature">Signed: The Tech Reaper 💀</p>
+    </div>
+
+    <!-- Close Button -->
+    <button class="close-button" (click)="close()">✕</button>
+  </div>
+</div>

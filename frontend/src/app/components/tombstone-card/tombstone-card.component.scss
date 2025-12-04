@@ -1,0 +1,177 @@
+.tombstone-card {
+  position: relative;
+  background: var(--bg-light);
+  border: 2px solid #444;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0, 255, 65, 0.1);
+  transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+  overflow: hidden;
+  animation: tombstone-rise 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 255, 65, 0.2);
+  }
+
+  &.cracking {
+    animation: shake 200ms ease-in-out infinite;
+  }
+
+  &.glowing {
+    animation: success-glow 2s ease-in-out 3;
+  }
+}
+
+.crack-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crack-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.crack-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: crack-grow 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px #00ff41);
+}
+
+.tech-icon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.filename {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+
+.rip-date {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+
+  &.status-dead {
+    background: rgba(102, 102, 102, 0.2);
+    color: var(--status-dead);
+  }
+
+  &.status-resurrecting {
+    background: rgba(0, 255, 65, 0.2);
+    color: var(--accent-green);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  &.status-alive {
+    background: rgba(0, 255, 65, 0.2);
+    color: var(--accent-green);
+  }
+
+  &.status-failed {
+    background: rgba(255, 68, 68, 0.2);
+    color: var(--status-failed);
+  }
+}
+
+.file-stats {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+// Animations
+@keyframes tombstone-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.8);
+  }
+  60% {
+    transform: translateY(-10px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes crack-grow {
+  0%, 100% {
+    stroke-dashoffset: 1000;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes success-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 65, 0.8);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tombstone-card {
+    animation: none !important;
+  }
+
+  .crack-path,
+  .status-badge.status-resurrecting {
+    animation: none !important;
+  }
+}

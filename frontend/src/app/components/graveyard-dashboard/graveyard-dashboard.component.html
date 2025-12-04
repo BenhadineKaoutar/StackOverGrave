@@ -1,0 +1,68 @@
+<div class="graveyard-container">
+  <!-- Fog overlay -->
+  <div class="fog-overlay"></div>
+
+  <!-- Floating particles -->
+  <div class="particles">
+    <div class="particle" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]"></div>
+  </div>
+
+  <!-- Upload Section -->
+  <app-file-upload (fileSelected)="onFileSelected($event)"></app-file-upload>
+
+  <!-- Filter Chips -->
+  <div class="filter-section">
+    <button class="filter-chip"
+            [class.active]="selectedFilters().length === 0"
+            (click)="selectedFilters.set([])">
+      All ({{ projects().length }})
+    </button>
+
+    <button class="filter-chip"
+            [class.active]="isFilterActive(TechnologyType.VB6)"
+            (click)="toggleFilter(TechnologyType.VB6)">
+      🔷 VB6 ({{ getFilterCount(TechnologyType.VB6) }})
+    </button>
+
+    <button class="filter-chip"
+            [class.active]="isFilterActive(TechnologyType.ActionScript)"
+            (click)="toggleFilter(TechnologyType.ActionScript)">
+      ⚡ Flash ({{ getFilterCount(TechnologyType.ActionScript) }})
+    </button>
+
+    <button class="filter-chip"
+            [class.active]="isFilterActive(TechnologyType.Silverlight)"
+            (click)="toggleFilter(TechnologyType.Silverlight)">
+      🌙 Silverlight ({{ getFilterCount(TechnologyType.Silverlight) }})
+    </button>
+
+    <button class="filter-chip"
+            [class.active]="isFilterActive(TechnologyType.DotNetFramework)"
+            (click)="toggleFilter(TechnologyType.DotNetFramework)">
+      🔵 .NET 4.x ({{ getFilterCount(TechnologyType.DotNetFramework) }})
+    </button>
+  </div>
+
+  <!-- Tombstone Grid -->
+  <div class="tombstone-grid" *ngIf="filteredProjects().length > 0">
+    <app-tombstone-card
+      *ngFor="let project of filteredProjects()"
+      [project]="project"
+      (cardClick)="onTombstoneClick($event)">
+    </app-tombstone-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredProjects().length === 0 && projects().length === 0">
+    <div class="empty-icon">👻</div>
+    <h3>So Empty...</h3>
+    <p>Upload your first legacy code to begin the resurrection!</p>
+  </div>
+
+  <!-- No Results State -->
+  <div class="empty-state" *ngIf="filteredProjects().length === 0 && projects().length > 0">
+    <div class="empty-icon">🪦</div>
+    <h3>Nothing Here</h3>
+    <p>No projects match this filter. Try selecting a different technology.</p>
+  </div>
+</div>

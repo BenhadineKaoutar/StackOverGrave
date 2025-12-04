@@ -1,0 +1,39 @@
+<div class="tombstone-card"
+     [class.cracking]="project.status === ProjectStatus.Processing"
+     [class.glowing]="project.status === ProjectStatus.Completed"
+     (click)="onClick()">
+
+  <!-- Crack overlay for animation -->
+  <div class="crack-overlay" *ngIf="project.status === ProjectStatus.Processing">
+    <svg viewBox="0 0 200 300" class="crack-svg">
+      <path d="M100,0 L95,50 L105,100 L90,150 L100,200 L95,250 L100,300"
+            stroke="#00ff41"
+            stroke-width="2"
+            fill="none"
+            class="crack-path"/>
+    </svg>
+  </div>
+
+  <!-- Technology Icon -->
+  <div class="tech-icon">
+    {{ getTechIcon() }}
+  </div>
+
+  <!-- Filename -->
+  <h3 class="filename">{{ project.originalFilename }}</h3>
+
+  <!-- RIP Date -->
+  <p class="rip-date">RIP {{ project.uploadedAt | date:'yyyy' }}</p>
+
+  <!-- Status Badge -->
+  <div class="status-badge" [class]="'status-' + getStatusClass()">
+    <span class="status-icon">{{ getStatusIcon() }}</span>
+    <span class="status-text">{{ getStatusText() }}</span>
+  </div>
+
+  <!-- File Stats -->
+  <div class="file-stats">
+    <span class="stat">📄 {{ formatFileSize(project.fileSize) }}</span>
+    <span class="stat" *ngIf="project.linesOfCode">{{ project.linesOfCode }} LOC</span>
+  </div>
+</div>
