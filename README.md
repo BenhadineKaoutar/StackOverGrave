@@ -33,19 +33,39 @@ StackOverGrave is a **fully functional** web application that resurrects dead/ob
 - 💰 **Cost tracking** ($2-7 per repository)
 - ⚡ **Background processing** with real-time progress updates
 
-## 🚀 Quick Start (2 Minutes)
+## 🚀 Quick Start
+
+See **[QUICK_START.md](QUICK_START.md)** for a 5-minute setup guide.
+
+### TL;DR
+
+1. Get OpenAI API key from https://platform.openai.com/api-keys
+2. Configure backend: `backend/appsettings.Development.json`
+3. Run backend: `cd backend && dotnet run`
+4. Run frontend: `cd frontend && npm install && npm start`
 
 ### ⚠️ IMPORTANT: OpenAI API Key Required
 
 **Before running the app, you MUST configure your OpenAI API key!**
 
-The resurrection feature uses OpenAI GPT to convert legacy code. Without a valid API key, the conversion will fail.
+See **[WHERE_TO_SET_KEYS.md](WHERE_TO_SET_KEYS.md)** for detailed instructions.
 
-#### Option 1: Environment Variable (Recommended)
+#### Quick Setup
+
+Edit `backend/appsettings.Development.json`:
+```json
+{
+  "OpenAI": {
+    "ApiKey": "sk-your-actual-key-here"
+  }
+}
+```
+
+#### Alternative: Environment Variable
 
 ```bash
 # Windows (PowerShell)
-$env:OPENAI_API_KEY="sk-your-actual-key-here"
+$env:OpenAI__ApiKey="sk-your-actual-key-here"
 
 # Windows (CMD)
 set OPENAI_API_KEY=sk-your-actual-key-here
@@ -658,12 +678,35 @@ dotnet publish -c Release
 - ✅ **Accessible** (WCAG AA)
 - ✅ **Responsive** (mobile/tablet/desktop)
 
+## 📚 Documentation
+
+### Getting Started
+- **[QUICK_START.md](QUICK_START.md)** - Get running in 5 minutes
+- **[setup-local-dev.md](setup-local-dev.md)** - Detailed local setup guide
+
+### Configuration
+- **[WHERE_TO_SET_KEYS.md](WHERE_TO_SET_KEYS.md)** - Visual guide for API keys
+- **[OPENAI_API_KEY_SETUP.md](OPENAI_API_KEY_SETUP.md)** - Complete OpenAI setup
+
+### Deployment
+- **[DEPLOYMENT_QUICK_REFERENCE.md](DEPLOYMENT_QUICK_REFERENCE.md)** - Quick deployment checklist
+- **[DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md)** - What was fixed and how
+- **[VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md)** - Detailed Vercel guide
+- **[BACKEND_DEPLOYMENT_OPTIONS.md](BACKEND_DEPLOYMENT_OPTIONS.md)** - Backend hosting options
+
+### Additional Resources
+- Swagger UI: http://localhost:5017/swagger (when backend is running)
+- Inline code comments throughout the codebase
+- Browser DevTools console for debugging
+
 ## 📞 Support
 
-- Check documentation files in root directory
-- Review inline code comments
-- Test with Swagger UI
-- Check browser DevTools console
+Having issues? Check these in order:
+1. **[QUICK_START.md](QUICK_START.md)** - Basic setup
+2. **[WHERE_TO_SET_KEYS.md](WHERE_TO_SET_KEYS.md)** - API key configuration
+3. **[DEPLOYMENT_QUICK_REFERENCE.md](DEPLOYMENT_QUICK_REFERENCE.md)** - Common deployment issues
+4. Browser console for error messages
+5. Backend logs for API issues
 
 ## 📄 License
 

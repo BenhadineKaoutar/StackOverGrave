@@ -3,6 +3,7 @@ import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Project, DeathCertificate } from '../models/project.model';
+import { environment } from '../../environments/environment';
 
 interface ConversionResultResponse {
   originalCode: string;
@@ -27,7 +28,7 @@ interface StatusResponse {
   providedIn: 'root'
 })
 export class ProjectService {
-  private apiUrl = 'http://localhost:5017/api';
+  private apiUrl = environment.apiUrl;
   projects = signal<Project[]>([]);
 
   constructor(private http: HttpClient) {}

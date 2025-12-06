@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface GitImportRequest {
   url: string;
@@ -54,7 +55,7 @@ interface RepositoryJobResponse {
   providedIn: 'root'
 })
 export class RepositoryService {
-  private apiUrl = 'http://localhost:5017/api/repository';
+  private apiUrl = `${environment.apiUrl}/repository`;
 
   constructor(private http: HttpClient) {}
 

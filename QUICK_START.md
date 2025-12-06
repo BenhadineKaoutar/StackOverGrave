@@ -1,205 +1,169 @@
-# StackOverGrave - Quick Start Guide
+# ⚡ Quick Start Guide
 
-## 🚀 Run the App (30 seconds)
+## 🎯 Goal
+Get StackOverGrave running locally in 5 minutes.
 
+---
+
+## 📋 Prerequisites
+
+- [ ] .NET 8.0 SDK installed
+- [ ] Node.js 18+ installed  
+- [ ] OpenAI API key (get from https://platform.openai.com/api-keys)
+
+---
+
+## 🚀 Setup (3 Steps)
+
+### 1. Configure OpenAI Key
+
+```bash
+cd backend
+cp appsettings.Development.json.example appsettings.Development.json
+```
+
+Edit `backend/appsettings.Development.json`:
+```json
+{
+  "OpenAI": {
+    "ApiKey": "sk-your-actual-key-here"
+  }
+}
+```
+
+### 2. Start Backend
+
+```bash
+cd backend
+dotnet run
+```
+
+Wait for: `✅ OpenAI API key is configured`
+
+### 3. Start Frontend
+
+New terminal:
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-App opens at `http://localhost:4200` ✨
+Browser opens automatically! 🎉
 
-## 🎮 What You Can Do Right Now
+---
 
-### 1. View the Graveyard
-- See 3 mock tombstone cards
-- Watch fog drift across screen
-- Notice floating ghost particles
+## ✅ Verify It Works
 
-### 2. Try Filters
-- Click "VB6" to filter
-- Click "All" to reset
-- See counts update
+1. Upload a `.vb` or `.as` file
+2. Click "Analyze"
+3. Click "Resurrect"
+4. Download converted code
 
-### 3. Upload Files (Visual Only)
-- Drag any file over upload zone
-- Watch ghost hand appear
-- See upload progress animation
+---
 
-### 4. View Code Comparison
-- Click the "Alive" tombstone (MainPage.xaml)
-- See VB6 → C# conversion
-- Scroll through both code panes
+## 📚 Next Steps
 
-### 5. Explore Autopsy Report
-- Click "Migration Notes" tab
-- Click "Dependencies" tab
-- Click "Breaking Changes" tab
-- Click "Warnings" tab
+**For Local Development:**
+- Read `setup-local-dev.md`
 
-### 6. Navigate Back
-- Click "← Back to Graveyard"
-- Returns to dashboard
+**For Production Deployment:**
+- Read `DEPLOYMENT_QUICK_REFERENCE.md`
+- Read `WHERE_TO_SET_KEYS.md`
 
-## 🎨 Features to Notice
+**For Detailed Configuration:**
+- Read `OPENAI_API_KEY_SETUP.md`
+- Read `BACKEND_DEPLOYMENT_OPTIONS.md`
 
-### Animations
-- ✅ Tombstones rise from ground
-- ✅ Crack effect on "Resurrecting" card
-- ✅ Glow effect on "Alive" card
-- ✅ Fog drifts slowly
-- ✅ Particles float upward
-- ✅ Ghost hand on drag-over
-- ✅ Smooth transitions everywhere
+---
 
-### Theme
-- ✅ Dark graveyard atmosphere
-- ✅ Phosphor green accents
-- ✅ Gothic fonts (Creepster)
-- ✅ Spooky but professional
+## 🆘 Troubleshooting
 
-### Responsive
-- ✅ Works on mobile
-- ✅ Works on tablet
-- ✅ Works on desktop
-
-## 📁 Project Structure
-
-```
-stackovergrave/
-├── frontend/              ← Angular app (READY)
-│   ├── src/app/
-│   │   ├── components/   ← 5 components
-│   │   ├── models/       ← TypeScript interfaces
-│   │   └── services/     ← API service
-│   └── package.json
-├── backend/              ← .NET API (skeleton)
-│   ├── Models/
-│   ├── Services/
-│   └── Data/
-├── samples/              ← Test files
-│   ├── vb6-calculator.vb
-│   ├── flash-game.as
-│   └── silverlight-form.xaml
-└── .kiro/
-    ├── specs/           ← 6 detailed specs
-    └── steering/        ← 4 guide documents
-```
-
-## 🎯 Mock Data Included
-
-**3 Projects:**
-1. Calculator.vb (VB6) - Dead 💀
-2. Game.as (ActionScript) - Resurrecting ⚡
-3. MainPage.xaml (Silverlight) - Alive ✅
-
-**1 Conversion:**
-- VB6 Calculator → C# .NET 8
-- 6 migration notes
-- 2 dependencies
-- 3 breaking changes
-- 2 warnings
-
-## 🔌 Connect to Backend (When Ready)
-
-Update `frontend/src/app/services/project.service.ts`:
-
-```typescript
-private apiUrl = 'https://localhost:7001/api';
-```
-
-Then implement:
-1. Real file upload
-2. Technology detection
-3. AI conversion
-4. Download functionality
-
-## 📚 Documentation
-
-- `README.md` - Project overview
-- `DEMO_GUIDE.md` - How to demo
-- `FRONTEND_COMPLETE.md` - What's built
-- `VISUAL_REFERENCE.md` - Design system
-- `KIRO_USAGE.md` - How Kiro helped
-- `START_FRONTEND.md` - Detailed setup
-
-## 🎬 Demo in 60 Seconds
-
-1. **Open app** (5s) - Show graveyard with fog
-2. **Hover tombstone** (5s) - Show lift effect
-3. **Click filter** (5s) - Show filtering
-4. **Drag file** (10s) - Show ghost hand + upload
-5. **Click tombstone** (5s) - Navigate to viewer
-6. **Show comparison** (15s) - Scroll both panes
-7. **Show autopsy** (10s) - Click through tabs
-8. **Go back** (5s) - Return to graveyard
-
-Total: 60 seconds ✨
-
-## 🐛 Troubleshooting
-
-**Port 4200 in use?**
+**Backend won't start:**
 ```bash
-npm start -- --port 4201
+dotnet --version  # Should be 8.0+
 ```
 
-**Node modules issues?**
+**Frontend won't start:**
 ```bash
-rm -rf node_modules package-lock.json
+node --version  # Should be 18+
+cd frontend
+rm -rf node_modules
 npm install
 ```
 
-**TypeScript errors?**
-```bash
-npm install typescript@~5.4.2
+**"OpenAI key not configured":**
+- Check `backend/appsettings.Development.json`
+- Key must start with `sk-`
+- Restart backend
+
+**API calls fail:**
+- Backend must be running on port 5017
+- Check browser console for errors
+
+---
+
+## 📊 What You Built
+
+```
+┌─────────────────┐
+│   Frontend      │  Angular 17 + Material
+│   localhost:4200│  Halloween-themed UI
+└────────┬────────┘
+         │
+         │ HTTP
+         ▼
+┌─────────────────┐
+│   Backend       │  .NET 8 Web API
+│   localhost:5017│  AI-powered conversion
+└────────┬────────┘
+         │
+         │ API Key
+         ▼
+┌─────────────────┐
+│   OpenAI API    │  GPT-4o-mini
+│                 │  Code conversion
+└─────────────────┘
 ```
 
-## 🎨 Customization
+---
 
-### Change Colors
-Edit `frontend/src/styles.scss`:
-```scss
---accent-green: #00ff41;  // Change this!
-```
+## 💰 Cost Estimate
 
-### Change Fonts
-Edit `frontend/src/styles.scss`:
-```scss
-@import url('https://fonts.googleapis.com/css2?family=YourFont');
-```
+- Small file: ~$0.01-0.05
+- Medium file: ~$0.05-0.20
+- Large file: ~$0.20-1.00
 
-### Disable Animations
-Add to `styles.scss`:
-```scss
-* {
-  animation: none !important;
-  transition: none !important;
-}
-```
+Set usage limits in OpenAI dashboard!
 
-## 🚀 Next Steps
+---
 
-### For Demo
-1. ✅ Run `npm start`
-2. ✅ Practice demo flow
-3. ✅ Record screen
-4. ✅ Add to portfolio
+## 🎃 Features
 
-### For Production
-1. ⏳ Complete backend API
-2. ⏳ Connect OpenAI via MCP
-3. ⏳ Add authentication
-4. ⏳ Deploy to Azure/Vercel
+✅ VB6 → C# conversion
+✅ ActionScript → TypeScript
+✅ Silverlight → Angular
+✅ GitHub repository import
+✅ Batch file conversion
+✅ Migration guides
+✅ Spooky Halloween theme
 
-## 💡 Pro Tips
+---
 
-- **Animations**: Respect `prefers-reduced-motion`
-- **Performance**: Lazy load code viewer route
-- **Accessibility**: All interactive elements have focus states
-- **Mobile**: Fully responsive, test on real devices
-- **Browser**: Works in Chrome, Firefox, Safari, Edge
+## 🔐 Security Note
 
-## 🎉 You're Ready!
+Your OpenAI key is:
+- ✅ Stored locally in gitignored file
+- ✅ Never sent to frontend
+- ✅ Only used by backend
+- ✅ Safe from exposure
 
-The frontend is complete and demo-ready. All animations work, the theme is consistent, and the UX is smooth. Just run `npm start` and enjoy! 🪦⚡✨
+---
+
+## Ready to Deploy?
+
+See `DEPLOYMENT_QUICK_REFERENCE.md` for:
+- Vercel frontend deployment
+- Railway/Render backend deployment
+- Environment variable setup
+- Production configuration
