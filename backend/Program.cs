@@ -29,16 +29,40 @@ builder.Services.AddHttpClient<IAiConversionService, AiConversionService>();
 builder.Services.AddHttpClient<IGitRepositoryService, GitRepositoryService>();
 builder.Services.AddHttpClient<IMigrationGuideService, MigrationGuideService>();
 
-// CORS for frontend - Allow all localhost origins in development
+// CORS for frontend - Allow localhost in development and configured origins in production
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.SetIsOriginAllowed(origin => 
-                new Uri(origin).Host == "localhost")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+        var allowedOrigins = builder.Configuration["CORS:Origins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            ?? Array.Empty<string>();
+        
+        if (builder.Environment.IsDevelopment())
+        {
+            // Development: Allow all localhost origins
+            policy.SetIsOriginAllowed(origin => 
+                    new Uri(origin).Host == "localhost")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
+        else if (allowedOrigins.Length > 0)
+        {
+            // Production: Use configured origins
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
+        else
+        {
+            // Fallback: Allow localhost only
+            policy.SetIsOriginAllowed(origin => 
+                    new Uri(origin).Host == "localhost")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
     });
 });
 
