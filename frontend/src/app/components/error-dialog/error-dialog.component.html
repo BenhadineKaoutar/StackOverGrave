@@ -1,0 +1,23 @@
+<div class="dialog-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="dialog-container">
+    <div class="dialog-header">
+      <span class="dialog-icon">❌</span>
+      <h2>{{ title }}</h2>
+      <button class="close-button" (click)="onClose()">×</button>
+    </div>
+
+    <div class="dialog-content">
+      <p class="dialog-message">{{ message }}</p>
+
+      <div class="dialog-details" *ngIf="details.length > 0">
+        <ul>
+          <li *ngFor="let detail of details">{{ detail }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button class="dialog-button" (click)="onClose()">OK</button>
+    </div>
+  </div>
+</div>

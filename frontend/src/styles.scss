@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 :root {
   --bg-dark: #0a0a0a;
@@ -41,5 +42,68 @@ code {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Toast Notification Styles */
+.error-toast {
+  background: var(--status-failed) !important;
+  color: var(--text-primary) !important;
+
+  .mat-mdc-snack-bar-label {
+    white-space: pre-line;
+  }
+
+  .mat-mdc-button {
+    color: var(--text-primary) !important;
+  }
+}
+
+.warning-toast {
+  background: #ff9800 !important;
+  color: #0a0a0a !important;
+
+  .mat-mdc-snack-bar-label {
+    white-space: pre-line;
+  }
+
+  .mat-mdc-button {
+    color: #0a0a0a !important;
+  }
+}
+
+.success-toast {
+  background: var(--accent-green) !important;
+  color: #0a0a0a !important;
+
+  .mat-mdc-snack-bar-label {
+    white-space: pre-line;
+  }
+
+  .mat-mdc-button {
+    color: #0a0a0a !important;
+  }
+}
+
+.info-toast {
+  background: #2196f3 !important;
+  color: var(--text-primary) !important;
+
+  .mat-mdc-snack-bar-label {
+    white-space: pre-line;
+  }
+
+  .mat-mdc-button {
+    color: var(--text-primary) !important;
+  }
+}
+
+.mat-mdc-snack-bar-container {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+
+  .mat-mdc-snack-bar-label {
+    font-size: 14px;
+    line-height: 1.5;
   }
 }

@@ -1,0 +1,49 @@
+<div class="file-tree-container" *ngIf="originalTree.length > 0">
+  <div class="tree-column original-column">
+    <div class="tree-header">
+      <span class="header-icon">📁</span>
+      <h3>Original Structure</h3>
+    </div>
+    <div class="tree-content">
+      <app-tree-node
+        *ngFor="let node of originalTree"
+        [node]="node"
+        [showStatus]="conversionResult !== undefined"
+        [level]="0">
+      </app-tree-node>
+    </div>
+  </div>
+
+  <div class="tree-divider"></div>
+
+  <div class="tree-column converted-column" *ngIf="convertedTree.length > 0">
+    <div class="tree-header">
+      <span class="header-icon">✨</span>
+      <h3>Converted Structure</h3>
+    </div>
+    <div class="tree-content">
+      <app-tree-node
+        *ngFor="let node of convertedTree"
+        [node]="node"
+        [showStatus]="true"
+        [level]="0">
+      </app-tree-node>
+    </div>
+  </div>
+
+  <div class="tree-column placeholder-column" *ngIf="convertedTree.length === 0">
+    <div class="tree-header">
+      <span class="header-icon">⏳</span>
+      <h3>Converted Structure</h3>
+    </div>
+    <div class="tree-content placeholder">
+      <span class="placeholder-icon">⏳</span>
+      <p>Conversion in progress...</p>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="empty-state" *ngIf="originalTree.length === 0">
+  <mat-icon>folder_off</mat-icon>
+  <p>No files to display</p>
+</div> -->

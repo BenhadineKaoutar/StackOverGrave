@@ -32,12 +32,39 @@ public class TechnologyDetectionService : ITechnologyDetectionService
     public TechnologyType DetectTechnology(string filename, string content)
     {
         var ext = Path.GetExtension(filename).ToLower();
+        var fullName = filename.ToLower();
         
-        // VB6 Detection
-        if (ext == ".vb" || ext == ".frm" || ext == ".bas" || ext == ".cls")
+        // ASP.NET Web Forms Detection (check before VB6)
+        if (fullName.EndsWith(".aspx.vb") || fullName.EndsWith(".aspx.cs") || 
+            fullName.EndsWith(".ascx.vb") || fullName.EndsWith(".ascx.cs") ||
+            fullName.EndsWith(".ashx.vb") || fullName.EndsWith(".ashx.cs"))
         {
-            if (Regex.IsMatch(content, @"Attribute VB_Name|Option Explicit|MsgBox|InputBox"))
+            return TechnologyType.DotNetFramework;
+        }
+        
+        // ASP.NET Web Forms markup
+        if (ext == ".aspx" || ext == ".ascx" || ext == ".master")
+        {
+            if (content.Contains("<%@") || content.Contains("runat=\"server\""))
+                return TechnologyType.DotNetFramework;
+        }
+        
+        // VB.NET / C# code files with .NET Framework indicators
+        if (ext == ".vb" || ext == ".cs")
+        {
+            // Check for .NET Framework patterns
+            if (Regex.IsMatch(content, @"Imports System\.Web|using System\.Web|Inherits System\.Web\.UI\.Page|: System\.Web\.UI\.Page"))
+                return TechnologyType.DotNetFramework;
+            
+            // Check for VB6 patterns (only if not .NET)
+            if (ext == ".vb" && Regex.IsMatch(content, @"Attribute VB_Name|Option Explicit.*\n.*Sub Main\(\)|MsgBox\s*\(|InputBox\s*\("))
                 return TechnologyType.VB6;
+        }
+        
+        // VB6 specific file extensions
+        if (ext == ".frm" || ext == ".bas" || ext == ".cls")
+        {
+            return TechnologyType.VB6;
         }
         
         // ActionScript Detection
@@ -54,8 +81,8 @@ public class TechnologyDetectionService : ITechnologyDetectionService
                 return TechnologyType.Silverlight;
         }
         
-        // Old .NET Framework Detection
-        if (ext == ".csproj")
+        // Old .NET Framework Detection (project files)
+        if (ext == ".csproj" || ext == ".vbproj")
         {
             if (Regex.IsMatch(content, @"<TargetFramework>net4[0-7]</TargetFramework>|<TargetFrameworkVersion>v4\.[0-7]"))
                 return TechnologyType.DotNetFramework;

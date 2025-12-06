@@ -16,4 +16,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <!-- Exclude uploaded files from compilation -->
+  <ItemGroup>
+    <Compile Remove="uploads\**" />
+    <Content Remove="uploads\**" />
+    <EmbeddedResource Remove="uploads\**" />
+    <None Remove="uploads\**" />
+  </ItemGroup>
+
 </Project>

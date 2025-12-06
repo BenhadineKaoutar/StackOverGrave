@@ -1,21 +1,39 @@
-import { Component, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Output, EventEmitter, signal, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ErrorDialogComponent],
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent {
   @Output() fileSelected = new EventEmitter<File>();
+  @Input() set progress(value: number) {
+    this.uploadProgress.set(value);
+  }
+  @Input() set uploading(value: boolean) {
+    this.isUploading.set(value);
+    if (value) {
+      this.currentPhase.set('uploading');
+    } else if (this.currentPhase() === 'uploading') {
+      this.currentPhase.set('idle');
+    }
+  }
 
   isDragging = signal(false);
   uploadProgress = signal(0);
   isUploading = signal(false);
   isAnalyzing = signal(false);
   currentPhase = signal<'idle' | 'uploading' | 'analyzing'>('idle');
+
+  // Error dialog state
+  showErrorDialog = signal(false);
+  errorDialogTitle = signal('');
+  errorDialogMessage = signal('');
+  errorDialogDetails = signal<string[]>([]);
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -51,39 +69,46 @@ export class FileUploadComponent {
     const maxSize = 5 * 1024 * 1024; // 5MB
 
     if (file.size > maxSize) {
-      alert('File size exceeds 5MB limit');
+      this.showError(
+        'File Too Large',
+        'File size exceeds 5MB limit. Please upload a smaller file.',
+        []
+      );
       return;
     }
 
-    const validExtensions = ['.vb', '.as', '.xaml', '.cs', '.vbproj', '.csproj', '.frm', '.bas', '.cls'];
-    const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    // Updated list of supported extensions including ASP.NET Web Forms
+    const validExtensions = [
+      '.vb', '.frm', '.bas', '.cls',  // VB6
+      '.as',                           // ActionScript
+      '.xaml',                         // Silverlight
+      '.cs', '.vbproj', '.csproj',    // .NET Framework
+      '.aspx', '.ascx', '.master'      // ASP.NET Web Forms markup
+    ];
 
-    if (!validExtensions.includes(fileExt)) {
-      alert('Unsupported file type. Please upload: ' + validExtensions.join(', '));
+    const fileName = file.name.toLowerCase();
+    const fileExt = fileName.substring(fileName.lastIndexOf('.'));
+
+    // Check for compound extensions like .aspx.vb or .aspx.cs
+    const isAspxCodeBehind = fileName.endsWith('.aspx.vb') || fileName.endsWith('.aspx.cs') ||
+                             fileName.endsWith('.ascx.vb') || fileName.endsWith('.ascx.cs') ||
+                             fileName.endsWith('.ashx.vb') || fileName.endsWith('.ashx.cs');
+
+    if (!validExtensions.includes(fileExt) && !isAspxCodeBehind) {
+      this.showError(
+        'Unsupported File Type',
+        'This file type is not supported for resurrection.',
+        [
+          'VB6: .vb, .frm, .bas, .cls',
+          'Flash/ActionScript: .as',
+          'Silverlight: .xaml',
+          '.NET Framework: .cs, .aspx, .aspx.vb, .aspx.cs, .ascx, .master'
+        ]
+      );
       return;
     }
 
-    this.simulateUpload();
     this.fileSelected.emit(file);
-  }
-
-  private simulateUpload(): void {
-    this.currentPhase.set('uploading');
-    this.isUploading.set(true);
-    this.uploadProgress.set(0);
-
-    const interval = setInterval(() => {
-      const current = this.uploadProgress();
-      if (current >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          this.isUploading.set(false);
-          this.uploadProgress.set(0);
-        }, 500);
-      } else {
-        this.uploadProgress.set(current + 10);
-      }
-    }, 100);
   }
 
   startAnalyzing(): void {
@@ -101,5 +126,16 @@ export class FileUploadComponent {
     this.isUploading.set(false);
     this.isAnalyzing.set(false);
     this.uploadProgress.set(0);
+  }
+
+  showError(title: string, message: string, details: string[]): void {
+    this.errorDialogTitle.set(title);
+    this.errorDialogMessage.set(message);
+    this.errorDialogDetails.set(details);
+    this.showErrorDialog.set(true);
+  }
+
+  closeErrorDialog(): void {
+    this.showErrorDialog.set(false);
   }
 }

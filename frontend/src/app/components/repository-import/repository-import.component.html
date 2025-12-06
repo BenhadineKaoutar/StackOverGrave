@@ -1,0 +1,136 @@
+<div class="import-container">
+  <header class="viewer-header">
+    <button class="back-button" routerLink="/">
+      ← Back to Graveyard
+    </button>
+    <div class="header-content">
+      <h1>🪦 Repository Resurrection</h1>
+      <p class="subtitle">Bring your legacy repositories back from the dead</p>
+    </div>
+    <div class="spacer"></div>
+  </header>
+
+  <mat-tab-group class="import-tabs" animationDuration="300ms">
+    <!-- Git Import Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-icon">☁️</span>
+        <span>Import from Git</span>
+      </ng-template>
+      <div class="tab-content git-import">
+        <div class="icon-wrapper">
+          <span class="large-icon">☁️</span>
+        </div>
+
+        <h2>Import from Git Repository</h2>
+        <p>Enter a public GitHub, GitLab, or Bitbucket repository URL</p>
+
+        <mat-form-field appearance="outline" class="url-input">
+          <mat-label>Repository URL</mat-label>
+          <input
+            matInput
+            placeholder="https://github.com/user/repo"
+            [(ngModel)]="gitUrl"
+            (keyup.enter)="importFromGit()"
+            [disabled]="isImporting()">
+          <span matPrefix class="link-icon">🔗</span>
+        </mat-form-field>
+
+        <button
+          class="import-button"
+          (click)="importFromGit()"
+          [disabled]="isImporting() || !gitUrl()">
+          {{ isImporting() ? '⏳ Importing...' : '⬇️ Import Repository' }}
+        </button>
+
+        <div class="examples">
+          <p class="examples-title">Example URLs:</p>
+          <ul>
+            <li>https://github.com/username/repository</li>
+            <li>https://gitlab.com/username/repository</li>
+            <li>https://bitbucket.org/username/repository</li>
+          </ul>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ZIP Upload Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-icon">📦</span>
+        <span>Upload ZIP</span>
+      </ng-template>
+      <div class="tab-content zip-upload">
+        <div
+          class="drop-zone"
+          appDragDrop
+          (fileDropped)="onFileDropped($event)">
+          <span class="upload-icon">☁️</span>
+          <h2>Upload Repository ZIP</h2>
+          <p class="drop-text">Drag & drop your ZIP file here</p>
+          <p class="or-text">or</p>
+          <button
+            class="browse-button"
+            (click)="fileInput.click()"
+            [disabled]="isUploading()">
+            {{ isUploading() ? '⏳ Uploading...' : '📁 Browse Files' }}
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept=".zip"
+            (change)="onFileSelected($event)"
+            hidden>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress" *ngIf="isUploading()">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="uploadProgress()"></div>
+            </div>
+            <p class="progress-text">{{ uploadProgress() }}%</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage()">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage() }}</span>
+  </div>
+
+  <!-- Limitations Notice -->
+  <div class="limitations-notice">
+    <div class="notice-header">
+      <mat-icon>warning</mat-icon>
+      <h3>Size Limits & Requirements</h3>
+    </div>
+    <div class="notice-content">
+      <div class="limit-section">
+        <h4>Small Projects (Full Conversion)</h4>
+        <ul>
+          <li>Maximum 20 files</li>
+          <li>Maximum 5,000 lines of code</li>
+          <li>All files will be converted</li>
+        </ul>
+      </div>
+      <div class="limit-section">
+        <h4>Medium Projects (Partial + Guide)</h4>
+        <ul>
+          <li>Maximum 50 files</li>
+          <li>Maximum 15,000 lines of code</li>
+          <li>Top 15 files converted + migration guide</li>
+        </ul>
+      </div>
+      <div class="limit-section">
+        <h4>General Limits</h4>
+        <ul>
+          <li>Maximum upload size: 50MB</li>
+          <li>Maximum single file: 1,000 lines of code</li>
+          <li>Supported: VB6, Flash/ActionScript, Silverlight, old .NET</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

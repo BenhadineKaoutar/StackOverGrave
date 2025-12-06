@@ -29,13 +29,14 @@ export interface Project {
   status: ProjectStatus;
   fileSize: number;
   linesOfCode?: number;
+  deprecatedDate?: Date;
 }
 
 export interface DeathCertificate {
-  technology: TechnologyType;
+  technology: string;
   originalFilename: string;
   detectedVersion?: string;
-  deprecatedDate: Date;
+  deprecatedDate: string;
   causeOfDeath: string;
   fileStats: {
     linesOfCode: number;

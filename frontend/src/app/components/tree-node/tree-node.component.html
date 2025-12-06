@@ -1,0 +1,28 @@
+<div class="tree-node"
+     [class.converted]="node.converted"
+     [class.skipped]="node.skipped"
+     [class.directory]="node.type === 'directory'"
+     [class.file]="node.type === 'file'"
+     [style.padding-left]="getIndentStyle()">
+
+  <div class="node-content" (click)="toggleNode()">
+    <span class="node-icon">{{ getIcon() }}</span>
+    <span class="node-name">{{ node.name }}</span>
+    <span class="node-loc" *ngIf="node.lineCount">{{ node.lineCount }} LOC</span>
+    <span *ngIf="getStatusIcon()"
+          class="status-icon"
+          [class.status-converted]="node.converted"
+          [class.status-skipped]="node.skipped">
+      {{ getStatusIcon() }}
+    </span>
+  </div>
+
+  <div class="tree-children" *ngIf="node.type === 'directory' && node.isExpanded && node.children">
+    <app-tree-node
+      *ngFor="let child of node.children"
+      [node]="child"
+      [showStatus]="showStatus"
+      [level]="level + 1">
+    </app-tree-node>
+  </div>
+</div>

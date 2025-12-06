@@ -84,8 +84,28 @@ public class ProjectController : ControllerBase
 
             var certificate = await _techDetection.AnalyzeFileAsync(project.FilePath);
             
+            // Check if technology is supported for conversion
+            if (certificate.Technology == TechnologyType.Unknown)
+            {
+                _logger.LogWarning("Unsupported technology detected for file: {Filename}", project.OriginalFilename);
+                return BadRequest(new 
+                { 
+                    error = "Unsupported file type",
+                    message = "This file type is not supported for resurrection.",
+                    supportedTechnologies = new[]
+                    {
+                        "VB6 (.frm, .bas, .cls, .vb)",
+                        "Flash/ActionScript (.as)",
+                        "Silverlight (.xaml)",
+                        ".NET Framework 4.x (.aspx, .aspx.vb, .aspx.cs, .cs, .vb with System.Web)"
+                    },
+                    detectedFile = project.OriginalFilename
+                });
+            }
+            
             project.Technology = certificate.Technology;
             project.LinesOfCode = certificate.FileStats.LinesOfCode;
+            project.DeprecatedDate = certificate.DeprecatedDate;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("File analyzed: {Id} - {Tech}", id, certificate.Technology);
@@ -226,6 +246,17 @@ public class ProjectController : ControllerBase
             var projects = await _context.Projects
                 .OrderByDescending(p => p.UploadedAt)
                 .Take(100)
+                .Select(p => new
+                {
+                    id = p.Id,
+                    originalFilename = p.OriginalFilename,
+                    technology = p.Technology.ToString(),
+                    uploadedAt = p.UploadedAt,
+                    status = p.Status.ToString(),
+                    fileSize = p.FileSize,
+                    linesOfCode = p.LinesOfCode,
+                    deprecatedDate = p.DeprecatedDate
+                })
                 .ToListAsync();
 
             return Ok(projects);

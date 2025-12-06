@@ -8,7 +8,23 @@
   </div>
 
   <!-- Upload Section -->
-  <app-file-upload (fileSelected)="onFileSelected($event)"></app-file-upload>
+  <app-file-upload
+    (fileSelected)="onFileSelected($event)"
+    [progress]="uploadProgress()"
+    [uploading]="isUploading()">
+  </app-file-upload>
+
+  <!-- Repository Import Link -->
+  <div class="repository-import-section">
+    <button class="repository-import-button" (click)="navigateToRepositoryImport()">
+      <span class="icon">📦</span>
+      <div class="button-content">
+        <span class="title">Import Full Repository</span>
+        <span class="subtitle">Resurrect entire Git repos or ZIP archives</span>
+      </div>
+      <span class="arrow">→</span>
+    </button>
+  </div>
 
   <!-- Filter Chips -->
   <div class="filter-section">
@@ -66,3 +82,12 @@
     <p>No projects match this filter. Try selecting a different technology.</p>
   </div>
 </div>
+
+<!-- Error Dialog -->
+<app-error-dialog
+  [isOpen]="showErrorDialog()"
+  [title]="errorDialogTitle()"
+  [message]="errorDialogMessage()"
+  [details]="errorDialogDetails()"
+  (close)="closeErrorDialog()">
+</app-error-dialog>

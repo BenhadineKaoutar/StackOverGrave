@@ -2,7 +2,7 @@
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 1rem;
 }
 
 // Fog overlay effect
@@ -57,30 +57,95 @@
   }
 }
 
+// Repository import section
+.repository-import-section {
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.repository-import-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-light);
+  border: 2px solid #444;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+  color: var(--text-primary);
+
+  .icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .button-content {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+  }
+
+  .arrow {
+    font-size: 20px;
+    color: var(--accent-green);
+    transition: transform 300ms ease-out;
+  }
+
+  &:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 255, 65, 0.2);
+
+    .arrow {
+      transform: translateX(6px);
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
 // Filter section
 .filter-section {
   display: flex;
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: 8px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
   position: relative;
   z-index: 2;
 }
 
 .filter-chip {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border: 2px solid #444;
-  border-radius: 20px;
+  border-radius: 16px;
   background: var(--bg-light);
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 200ms ease-out;
 
   &:hover {
     border-color: var(--accent-green);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   &.active {
@@ -93,8 +158,8 @@
 // Tombstone grid
 .tombstone-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
   position: relative;
   z-index: 2;
 }
@@ -102,25 +167,25 @@
 // Empty states
 .empty-state {
   text-align: center;
-  padding: 64px 24px;
+  padding: 3rem 1.5rem;
   position: relative;
   z-index: 2;
 
   .empty-icon {
-    font-size: 80px;
-    margin-bottom: 24px;
+    font-size: 60px;
+    margin-bottom: 1rem;
     animation: float 3s ease-in-out infinite;
   }
 
   h3 {
-    font-size: 32px;
-    margin-bottom: 16px;
+    font-size: 24px;
+    margin-bottom: 0.75rem;
     color: var(--text-primary);
   }
 
   p {
     color: var(--text-secondary);
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
@@ -169,6 +234,28 @@
 @media (max-width: 768px) {
   .graveyard-container {
     padding: 16px;
+  }
+
+  .repository-import-button {
+    padding: 16px;
+
+    .icon {
+      font-size: 24px;
+    }
+
+    .button-content {
+      .title {
+        font-size: 16px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+    }
+
+    .arrow {
+      font-size: 20px;
+    }
   }
 
   .tombstone-grid {

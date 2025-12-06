@@ -1,4 +1,5 @@
 using StackOverGrave.Api.Models;
+using StackOverGrave.Api.Exceptions;
 using System.Text.Json;
 
 namespace StackOverGrave.Api.Services;
@@ -34,7 +35,11 @@ public class AiConversionService : IAiConversionService
         {
             if (string.IsNullOrWhiteSpace(_openAiApiKey))
             {
-                throw new InvalidOperationException("OpenAI API key is not configured. Please add it to appsettings.json");
+                throw new AiServiceException(
+                    "AI service is not configured",
+                    new { missingConfiguration = "OpenAI API key" },
+                    "Please contact the administrator to configure the OpenAI API key"
+                );
             }
 
             _logger.LogInformation("🤖 Building prompt for {Source} conversion", sourceTech);
@@ -64,7 +69,11 @@ public class AiConversionService : IAiConversionService
             TechnologyType.ActionScript => BuildActionScriptPrompt(code),
             TechnologyType.Silverlight => BuildSilverlightPrompt(code),
             TechnologyType.DotNetFramework => BuildDotNetFrameworkPrompt(code),
-            _ => throw new ArgumentException("Unsupported technology type")
+            _ => throw new UnsupportedTechnologyException(
+                "Unsupported technology type",
+                new { technology = sourceTech.ToString() },
+                "Currently supported: VB6, Flash/ActionScript, Silverlight, .NET Framework"
+            )
         };
 
         return basePrompt;
@@ -73,6 +82,8 @@ public class AiConversionService : IAiConversionService
     private string BuildVB6Prompt(string code)
     {
         return $@"You are an expert software migration engineer. Convert the following VB6 code to modern C# .NET 8.
+
+CRITICAL: You MUST provide the COMPLETE converted C# code, not a placeholder or comment. Generate the actual working code.
 
 Requirements:
 - Preserve all business logic exactly
@@ -85,21 +96,25 @@ Requirements:
 - Replace MsgBox with proper logging or exceptions
 
 VB6 Code:
+```vb
 {code}
+```
 
-Respond in JSON format:
+Respond ONLY with valid JSON in this exact format (no markdown, no code blocks):
 {{
-  ""convertedCode"": ""// C# code here"",
-  ""migrationNotes"": [""note1"", ""note2""],
-  ""dependencies"": [""package1"", ""package2""],
-  ""breakingChanges"": [""change1"", ""change2""],
-  ""warnings"": [""warning1"", ""warning2""]
+  ""convertedCode"": ""<ACTUAL COMPLETE C# CODE HERE - NOT A PLACEHOLDER>"",
+  ""migrationNotes"": [""List of migration notes""],
+  ""dependencies"": [""List of required NuGet packages""],
+  ""breakingChanges"": [""List of breaking changes""],
+  ""warnings"": [""List of warnings""]
 }}";
     }
 
     private string BuildActionScriptPrompt(string code)
     {
         return $@"You are an expert Flash/ActionScript to modern web migration engineer. Convert the following ActionScript code to TypeScript for use in Angular 17+.
+
+CRITICAL: You MUST provide the COMPLETE converted TypeScript code, not a placeholder or comment. Generate the actual working code.
 
 Requirements:
 - Replace Flash display objects with HTML5 Canvas or DOM elements
@@ -112,21 +127,25 @@ Requirements:
 - Add TypeScript strict types
 
 ActionScript Code:
+```actionscript
 {code}
+```
 
-Respond in JSON format:
+Respond ONLY with valid JSON in this exact format (no markdown, no code blocks):
 {{
-  ""convertedCode"": ""// TypeScript code here"",
-  ""migrationNotes"": [""note1"", ""note2""],
+  ""convertedCode"": ""<ACTUAL COMPLETE TYPESCRIPT CODE HERE - NOT A PLACEHOLDER>"",
+  ""migrationNotes"": [""List of migration notes""],
   ""dependencies"": [""@angular/core"", ""rxjs""],
-  ""breakingChanges"": [""change1"", ""change2""],
-  ""warnings"": [""warning1"", ""warning2""]
+  ""breakingChanges"": [""List of breaking changes""],
+  ""warnings"": [""List of warnings""]
 }}";
     }
 
     private string BuildSilverlightPrompt(string code)
     {
         return $@"You are an expert Silverlight to Angular migration engineer. Convert the following Silverlight XAML to Angular component.
+
+CRITICAL: You MUST provide the COMPLETE converted Angular TypeScript code, not a placeholder or comment. Generate the actual working code.
 
 Requirements:
 - Map XAML controls to Angular Material components
@@ -136,15 +155,17 @@ Requirements:
 - Use Angular reactive forms for form validation
 
 Silverlight XAML:
+```xaml
 {code}
+```
 
-Respond in JSON format:
+Respond ONLY with valid JSON in this exact format (no markdown, no code blocks):
 {{
-  ""convertedCode"": ""// Angular component code here"",
-  ""migrationNotes"": [""note1"", ""note2""],
+  ""convertedCode"": ""<ACTUAL COMPLETE ANGULAR TYPESCRIPT CODE HERE - NOT A PLACEHOLDER>"",
+  ""migrationNotes"": [""List of migration notes""],
   ""dependencies"": [""@angular/material""],
-  ""breakingChanges"": [""change1"", ""change2""],
-  ""warnings"": [""warning1"", ""warning2""]
+  ""breakingChanges"": [""List of breaking changes""],
+  ""warnings"": [""List of warnings""]
 }}";
     }
 
@@ -152,24 +173,32 @@ Respond in JSON format:
     {
         return $@"You are an expert .NET Framework to .NET 8 migration engineer. Modernize the following .NET Framework code to .NET 8.
 
+CRITICAL: You MUST provide the COMPLETE converted .NET 8 C# code, not a placeholder or comment. Generate the actual working code.
+
 Requirements:
-- Replace deprecated APIs with modern equivalents
+- Replace System.Web.UI.Page with ASP.NET Core Razor Pages or MVC Controllers
+- Replace System.Web.UI controls with Razor syntax or HTML helpers
+- Convert code-behind to controller actions or page models
+- Replace ViewState with proper state management (TempData, Session, or client-side)
+- Replace Server.MapPath with IWebHostEnvironment
+- Replace HttpContext.Current with dependency-injected HttpContext
 - Add nullable reference types
 - Use modern C# features (pattern matching, records, init properties)
-- Replace System.Web with ASP.NET Core equivalents
 - Use built-in dependency injection
 - Update to latest NuGet package versions
 
 .NET Framework Code:
+```csharp
 {code}
+```
 
-Respond in JSON format:
+Respond ONLY with valid JSON in this exact format (no markdown, no code blocks):
 {{
-  ""convertedCode"": ""// .NET 8 code here"",
-  ""migrationNotes"": [""note1"", ""note2""],
-  ""dependencies"": [""package1"", ""package2""],
-  ""breakingChanges"": [""change1"", ""change2""],
-  ""warnings"": [""warning1"", ""warning2""]
+  ""convertedCode"": ""<ACTUAL COMPLETE .NET 8 C# CODE HERE - NOT A PLACEHOLDER>"",
+  ""migrationNotes"": [""List of migration notes explaining the conversion""],
+  ""dependencies"": [""List of required NuGet packages""],
+  ""breakingChanges"": [""List of breaking changes from original code""],
+  ""warnings"": [""List of warnings or manual review items""]
 }}";
     }
 
@@ -180,11 +209,11 @@ Respond in JSON format:
             model = "gpt-4o-mini", // Using gpt-4o-mini - faster and cheaper
             messages = new[]
             {
-                new { role = "system", content = "You are a code migration expert. Always respond with valid JSON." },
+                new { role = "system", content = "You are a code migration expert. You MUST generate complete, working code - never use placeholders or comments like '// code here'. Always respond with valid JSON containing the actual converted code." },
                 new { role = "user", content = prompt }
             },
-            temperature = 0.2,
-            max_tokens = 2000
+            temperature = 0.3,
+            max_tokens = 4000  // Increased to allow for longer code responses
         };
 
         var requestJson = JsonSerializer.Serialize(request);
@@ -220,14 +249,22 @@ Respond in JSON format:
         if (responseObj?.Choices == null || responseObj.Choices.Count == 0)
         {
             _logger.LogError("❌ No choices in OpenAI response: {Response}", responseJson);
-            throw new Exception("Invalid OpenAI response - no choices");
+            throw new AiServiceException(
+                "AI service returned an invalid response",
+                new { error = "No choices in response" },
+                "Please try again in a few moments"
+            );
         }
 
         var messageContent = responseObj.Choices[0]?.Message?.Content;
         if (string.IsNullOrEmpty(messageContent))
         {
             _logger.LogError("❌ Empty content in OpenAI response");
-            throw new Exception("Invalid OpenAI response - empty content");
+            throw new AiServiceException(
+                "AI service returned an empty response",
+                new { error = "Empty content" },
+                "Please try again in a few moments"
+            );
         }
 
         return messageContent;
@@ -249,10 +286,18 @@ Respond in JSON format:
                     PropertyNameCaseInsensitive = true
                 });
 
-                return result ?? throw new Exception("Failed to parse conversion result");
+                return result ?? throw new AiServiceException(
+                    "Failed to parse AI conversion result",
+                    new { error = "Invalid JSON structure" },
+                    "Please try again"
+                );
             }
 
-            throw new Exception("No JSON found in response");
+            throw new AiServiceException(
+                "AI service response format is invalid",
+                new { error = "No JSON found in response" },
+                "Please try again"
+            );
         }
         catch (Exception ex)
         {

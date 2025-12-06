@@ -1,0 +1,104 @@
+<div class="status-container" *ngIf="job">
+  <!-- Header matching repository import -->
+  <header class="viewer-header">
+    <button class="back-button" routerLink="/">
+      ← Back to Graveyard
+    </button>
+    <div class="header-content">
+      <h1>🪦 Resurrection Status</h1>
+    </div>
+    <div class="spacer"></div>
+  </header>
+
+  <!-- Main Status Card -->
+  <div class="status-card" [class.completed]="isCompleted()" [class.failed]="isFailed()">
+    <div class="status-icon-large">{{ getStatusEmoji(job.status) }}</div>
+
+    <h2 class="status-title">{{ getStatusTitle(job.status) }}</h2>
+
+    <!-- Progress Section -->
+    <div class="progress-section" *ngIf="!isCompleted() && !isFailed()">
+      <!-- Show spinner for downloading and packaging -->
+      <div *ngIf="showSpinner()" class="spinner-wrapper">
+        <div class="spinner"></div>
+        <p class="status-message">{{ job.statusMessage }}</p>
+      </div>
+
+      <!-- Show progress bar for other statuses -->
+      <div *ngIf="!showSpinner()" class="progress-bar-wrapper">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="job.progressPercentage" [class.glow]="isProcessing()"></div>
+        </div>
+        <span class="progress-percentage">{{ job.progressPercentage }}%</span>
+        <p class="status-message">{{ job.statusMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Completed Results -->
+    <div *ngIf="isCompleted()" class="completion-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <div class="stat-number">{{ getFilesAnalyzed() }}</div>
+          <div class="stat-label">Files Analyzed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✨</div>
+          <div class="stat-number">{{ getFilesConverted() }}</div>
+          <div class="stat-label">Files Resurrected</div>
+        </div>
+      </div>
+
+      <button class="download-button" (click)="download()">
+        <span class="button-icon">📦</span>
+        <span>Download Converted Project</span>
+      </button>
+    </div>
+
+    <!-- Failed Error Display -->
+    <div *ngIf="isFailed()" class="failure-content">
+      <div class="error-box">
+        <h3>💀 Resurrection Failed</h3>
+        <p class="error-intro">The resurrection ritual encountered some issues:</p>
+
+        <div class="error-list" *ngIf="job.errors && job.errors.length > 0">
+          <div class="error-item" *ngFor="let error of job.errors">
+            <span class="error-bullet">⚠️</span>
+            <span>{{ error }}</span>
+          </div>
+        </div>
+
+        <p *ngIf="!job.errors || job.errors.length === 0" class="error-generic">
+          An unexpected error occurred during the conversion process.
+        </p>
+
+        <div class="suggestions-box">
+          <h4>🔮 Troubleshooting Tips:</h4>
+          <ul>
+            <li>Verify your repository is within size limits (≤50 files, ≤15,000 LOC)</li>
+            <li>Ensure no single file exceeds 1,000 lines of code</li>
+            <li>Check that the repository URL is accessible and public</li>
+            <li>Try uploading a smaller subset of your project</li>
+          </ul>
+        </div>
+
+        <button class="retry-button" routerLink="/import">
+          🔄 Try Another Repository
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Tree Visualization (only when completed) -->
+  <div *ngIf="isCompleted()" class="file-tree-section">
+    <app-file-tree-visualization
+      [analysisResult]="job.analysisResult"
+      [conversionResult]="job.conversionResult">
+    </app-file-tree-visualization>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="!job">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <p>Loading conversion status...</p>
+</div>

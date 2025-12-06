@@ -10,4 +10,5 @@ public class Project
     public long FileSize { get; set; }
     public int LinesOfCode { get; set; }
     public string FilePath { get; set; } = string.Empty;
+    public DateTime? DeprecatedDate { get; set; }
 }

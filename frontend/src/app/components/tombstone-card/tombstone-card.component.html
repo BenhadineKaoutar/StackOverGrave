@@ -23,7 +23,7 @@
   <h3 class="filename">{{ project.originalFilename }}</h3>
 
   <!-- RIP Date -->
-  <p class="rip-date">RIP {{ project.uploadedAt | date:'yyyy' }}</p>
+  <p class="rip-date">RIP {{ (project.deprecatedDate || project.uploadedAt) | date:'yyyy' }}</p>
 
   <!-- Status Badge -->
   <div class="status-badge" [class]="'status-' + getStatusClass()">

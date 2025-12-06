@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import { Project, DeathCertificate } from '../models/project.model';
 
 interface ConversionResultResponse {
@@ -34,7 +35,31 @@ export class ProjectService {
   uploadFile(file: File): Observable<{ id: string }> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<{ id: string }>(`${this.apiUrl}/upload`, formData);
+    return this.http.post<{ id: string }>(`${this.apiUrl}/upload`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(
+      filter((event): event is HttpResponse<{ id: string }> => event.type === HttpEventType.Response),
+      map(event => event.body!)
+    );
+  }
+
+  uploadFileWithProgress(file: File): Observable<number | { id: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ id: string }>(`${this.apiUrl}/upload`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(
+      map(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          return Math.round((100 * event.loaded) / (event.total || event.loaded));
+        } else if (event.type === HttpEventType.Response) {
+          return event.body!;
+        }
+        return 0;
+      })
+    );
   }
 
   analyzeFile(id: string): Observable<DeathCertificate> {

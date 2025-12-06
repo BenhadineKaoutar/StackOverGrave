@@ -1,0 +1,99 @@
+// Tombstone rising animation
+@keyframes tombstone-rise {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .tree-node.converted {
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.tree-node {
+  user-select: none;
+
+  .node-content {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 200ms ease-out;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  .node-icon {
+    font-size: 16px;
+    line-height: 1;
+    margin-right: 8px;
+    display: inline-block;
+  }
+
+  .node-name {
+    flex: 1;
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+  .node-loc {
+    font-size: 12px;
+    color: #888888;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .status-icon {
+    font-size: 14px;
+    line-height: 1;
+    margin-left: 8px;
+    display: inline-block;
+
+    &.status-converted {
+      color: #00ff41;
+    }
+
+    &.status-skipped {
+      color: #666666;
+    }
+  }
+
+  .tree-children {
+    margin-left: 0;
+  }
+
+  &.converted {
+    animation: tombstone-rise 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+
+    .node-content {
+      background: rgba(0, 255, 65, 0.1);
+      border-left: 3px solid #00ff41;
+      box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+
+    .node-name {
+      color: #00ff41;
+    }
+  }
+
+  &.skipped {
+    opacity: 0.5;
+
+    .node-name {
+      color: #888888;
+    }
+  }
+}

@@ -41,8 +41,11 @@ import { filter } from 'rxjs/operators';
     }
 
     .subtitle {
-      color: var(--text-secondary);
-      font-size: 18px;
+      color: #00ff41;
+      font-size: 20px;
+      text-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
 
     @media (max-width: 768px) {

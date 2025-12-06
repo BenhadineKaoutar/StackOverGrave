@@ -1,0 +1,199 @@
+.file-tree-container {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 24px;
+  margin-top: 24px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 24px;
+  border: 2px solid #2a2a2a;
+  min-height: 400px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    .tree-divider {
+      display: none;
+    }
+  }
+}
+
+.tree-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // Prevent overflow
+
+  &.original-column {
+    .tree-header {
+      .header-icon {
+        color: #cccccc;
+      }
+      mat-icon {
+        color: #cccccc;
+      }
+    }
+  }
+
+  &.converted-column {
+    .tree-header {
+      .header-icon {
+        color: #00ff41;
+      }
+      mat-icon {
+        color: #00ff41;
+      }
+    }
+  }
+
+  &.placeholder-column {
+    .tree-header {
+      .header-icon {
+        color: #888888;
+      }
+      mat-icon {
+        color: #888888;
+      }
+    }
+  }
+}
+
+.tree-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #2a2a2a;
+
+  .header-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+}
+
+.tree-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 600px;
+  padding-right: 8px;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 4px;
+
+    &:hover {
+      background: #3a3a3a;
+    }
+  }
+
+  &.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: #888888;
+
+    .placeholder-icon {
+      font-size: 64px;
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0.5;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    p {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+}
+
+.tree-divider {
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #2a2a2a 20%,
+    #2a2a2a 80%,
+    transparent
+  );
+  align-self: stretch;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  color: #888888;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Highlight converted files with green glow
+:host ::ng-deep {
+  .tree-node.converted {
+    animation: tombstone-rise 0.6s ease-out;
+
+    .node-content {
+      background: rgba(0, 255, 65, 0.1);
+      border-left: 3px solid #00ff41;
+    }
+  }
+
+  .tree-node.skipped {
+    opacity: 0.5;
+
+    .node-name {
+      color: #888888;
+      text-decoration: line-through;
+    }
+  }
+}

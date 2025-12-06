@@ -9,6 +9,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ConversionResult> ConversionResults => Set<ConversionResult>();
+    public DbSet<RepositoryProject> RepositoryProjects => Set<RepositoryProject>();
+    public DbSet<RepositoryFile> RepositoryFiles => Set<RepositoryFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,5 +24,17 @@ public class AppDbContext : DbContext
             .HasOne(c => c.Project)
             .WithMany()
             .HasForeignKey(c => c.ProjectId);
+
+        modelBuilder.Entity<RepositoryProject>()
+            .HasKey(rp => rp.Id);
+
+        modelBuilder.Entity<RepositoryFile>()
+            .HasKey(rf => rf.Id);
+
+        modelBuilder.Entity<RepositoryFile>()
+            .HasOne(rf => rf.RepositoryProject)
+            .WithMany(rp => rp.Files)
+            .HasForeignKey(rf => rf.RepositoryProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

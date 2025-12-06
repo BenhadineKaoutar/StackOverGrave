@@ -58,3 +58,12 @@
     </div>
   </div>
 </div>
+
+<!-- Error Dialog -->
+<app-error-dialog
+  [isOpen]="showErrorDialog()"
+  [title]="errorDialogTitle()"
+  [message]="errorDialogMessage()"
+  [details]="errorDialogDetails()"
+  (close)="closeErrorDialog()">
+</app-error-dialog>

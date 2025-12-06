@@ -21,6 +21,20 @@
 - [ ] Mobile responsive tested
 - [ ] Cross-browser tested (Chrome, Firefox, Safari, Edge)
 
+### Repository Resurrection Testing
+- [ ] Git import works (GitHub/GitLab/Bitbucket)
+- [ ] ZIP upload works (max 50MB)
+- [ ] Repository analysis works
+- [ ] Size limits enforced correctly
+- [ ] File prioritization works
+- [ ] Batch conversion works
+- [ ] Migration guide generated
+- [ ] File tree visualization displays
+- [ ] Background jobs process correctly
+- [ ] Progress updates work
+- [ ] Cost tracking accurate
+- [ ] Rate limiting works
+
 ### Documentation
 - [x] README.md complete
 - [x] API documentation (Swagger)
@@ -73,6 +87,10 @@ dotnet publish -c Release -o ./publish
 - [ ] Environment variables set
 - [ ] OpenAI API key configured
 - [ ] CORS configured for production domain
+- [ ] Repository limits configured
+- [ ] Rate limiting configured
+- [ ] Temp directory configured
+- [ ] Cleanup job scheduled
 
 ### Azure App Service
 ```bash
@@ -109,6 +127,17 @@ VITE_API_URL=https://api.stackovergrave.com
 OPENAI_API_KEY=sk-xxx
 ConnectionStrings__DefaultConnection=Server=xxx
 ASPNETCORE_ENVIRONMENT=Production
+Repository__MaxFileSizeMB=50
+Repository__MaxFiles=50
+Repository__MaxLinesOfCode=15000
+Repository__MaxSingleFileLOC=1000
+Repository__TempDirectory=/tmp/stackovergrave
+OpenAI__Model=gpt-3.5-turbo
+OpenAI__Temperature=0.3
+OpenAI__MaxCostPerConversion=7.0
+RateLimiting__EnableRateLimiting=true
+RateLimiting__PermitLimit=10
+RateLimiting__WindowSeconds=60
 ```
 
 ## Database
@@ -142,11 +171,15 @@ dotnet ef database update
 ### Backend
 - [ ] API key in environment variables
 - [ ] Input validation on all endpoints
-- [ ] File upload size limits
-- [ ] Rate limiting configured
+- [ ] File upload size limits (50MB)
+- [ ] Repository size limits enforced
+- [ ] Rate limiting configured (10 req/min)
 - [ ] CORS properly configured
 - [ ] SQL injection prevention
 - [ ] Error messages don't leak info
+- [ ] Temp file cleanup scheduled
+- [ ] Git URL validation enabled
+- [ ] ZIP extraction limits enforced
 
 ## Performance
 
@@ -200,12 +233,18 @@ dotnet ef database update
 - [ ] Billing alerts configured
 - [ ] Cost tracking enabled
 - [ ] Budget defined
+- [ ] Max cost per conversion: $7
+- [ ] Repository limits enforced (50 files, 15K LOC)
+- [ ] Rate limiting active (10 req/min)
+- [ ] Token limits configured
 
 ### Hosting
 - [ ] Hosting plan selected
 - [ ] Auto-scaling configured
 - [ ] Cost alerts set
 - [ ] Budget defined
+- [ ] Temp storage cleanup scheduled
+- [ ] Database size monitored
 
 ## Backup & Recovery
 
