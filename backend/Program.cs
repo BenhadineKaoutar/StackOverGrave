@@ -34,8 +34,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var allowedOrigins = builder.Configuration["CORS:Origins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+        var corsOrigins = builder.Configuration["CORS:Origins"];
+        var allowedOrigins = corsOrigins?.Split(',', StringSplitOptions.RemoveEmptyEntries)
             ?? Array.Empty<string>();
+        
+        // Trim whitespace and remove trailing slashes from origins
+        allowedOrigins = allowedOrigins.Select(o => o.Trim().TrimEnd('/')).ToArray();
+        
+        Console.WriteLine($"🔧 CORS Configuration:");
+        Console.WriteLine($"   Environment: {builder.Environment.EnvironmentName}");
+        Console.WriteLine($"   CORS:Origins config: {corsOrigins ?? "(null)"}");
+        Console.WriteLine($"   Allowed origins count: {allowedOrigins.Length}");
+        foreach (var origin in allowedOrigins)
+        {
+            Console.WriteLine($"   - {origin}");
+        }
         
         if (builder.Environment.IsDevelopment())
         {
@@ -56,7 +69,8 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            // Fallback: Allow localhost only
+            // Fallback: Allow localhost only (safe default)
+            Console.WriteLine("⚠️  WARNING: No CORS origins configured! Only localhost will be allowed.");
             policy.SetIsOriginAllowed(origin => 
                     new Uri(origin).Host == "localhost")
                   .AllowAnyMethod()
